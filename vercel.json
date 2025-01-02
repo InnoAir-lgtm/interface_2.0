@@ -1,0 +1,16 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "tailwind.config.js",
+        "use": "@vercel/webpack-asset-relocator-loader"
+      }
+    ],
+    "build": {
+      "command": "npm run build",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+  
