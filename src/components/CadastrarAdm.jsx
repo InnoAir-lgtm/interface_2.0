@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../apiUrl';
 
 export default function CadastrarAdm() {
     const [formData, setFormData] = useState({ email: '', name: '', password: '', grupo: '', perfil: '' });
@@ -32,7 +32,7 @@ export default function CadastrarAdm() {
         }
 
         try {
-            const response = await axios.post('http://localhost:3000/cadastrar-usuario', {
+            const response = await api.post('http://localhost:3000/cadastrar-usuario', {
                 email: `${formData.email}@bela.com.br`,
                 nome: formData.name,
                 senha: formData.password,

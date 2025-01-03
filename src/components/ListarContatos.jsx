@@ -16,8 +16,7 @@ export default function ListarContatos({ selectedPessoa }) {
         try {
             const response = await api.get(`/listar-contatos-pessoa?pes_id=${pes_id}`, {
             })
-
-            setContatos(data.data)
+            setContatos(response.data.data || []);
         } catch (error) {
             console.error('Erro ao listar Contatos:', error.message);
         }

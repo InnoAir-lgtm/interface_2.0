@@ -1,10 +1,10 @@
-import  { useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
+import api from '../apiUrl';
 
 import { useEndereco } from '../auth/ProviderEndereco';
 
 export default function CadastrarEndereco() {
-    const [ addEndereco] = useEndereco();
+    const { addEndereco } = useEndereco(); // Certifique-se de usar a desestruturação correta
     const [endereco, setEndereco] = useState({ cep: '', logradouro: '', bairro: '', cidade: '', uf: '' });
     const [showSidebar, setShowSidebar] = useState(false);
 
@@ -16,19 +16,19 @@ export default function CadastrarEndereco() {
         }
         try {
             const formattedCep = endereco.cep.replace('-', '');
-            const response = await axios.post('http://localhost:3000/cadastrar-endereco', {
+            const response = await api.post('/cadastrar-endereco', {
                 cep: formattedCep,
                 logradouro: endereco.logradouro,
                 bairro: endereco.bairro,
                 cidade: endereco.cidade,
                 uf: endereco.uf,
-                latitude: endereco.latitude || '', 
+                latitude: endereco.latitude || '',
                 longitude: endereco.longitude || '',
             });
-            console.log(response)
+            console.log(response);
             alert('Endereço cadastrado com sucesso!');
 
-            addEndereco(endereco)
+            addEndereco(endereco); // Chamada correta da função
             setEndereco({ cep: '', logradouro: '', bairro: '', cidade: '', uf: '' });
             setShowSidebar(false);
         } catch (error) {
@@ -36,8 +36,6 @@ export default function CadastrarEndereco() {
             alert('Falha ao cadastrar endereço.');
         }
     };
-
-    
 
     const fetchEndereco = async (cep) => {
         const cleanCep = cep.replace('-', '');
@@ -49,23 +47,23 @@ export default function CadastrarEndereco() {
             );
             const data = await response.json();
 
-            if (data.status === "OK") {
+            if (data.status === 'OK') {
                 const result = data.results[0];
                 const endereco = result.address_components.reduce((acc, component) => {
                     const type = component.types[0];
                     switch (type) {
-                        case "route":
+                        case 'route':
                             acc.logradouro = component.long_name;
                             break;
-                        case "sublocality_level_1":
-                        case "political":
+                        case 'sublocality_level_1':
+                        case 'political':
                             acc.bairro = component.long_name;
                             break;
-                        case "administrative_area_level_1":
+                        case 'administrative_area_level_1':
                             acc.uf = component.short_name;
                             break;
-                        case "administrative_area_level_2":
-                        case "locality":
+                        case 'administrative_area_level_2':
+                        case 'locality':
                             acc.cidade = component.long_name;
                             acc.latitude = result.geometry.location.lat;
                             acc.longitude = result.geometry.location.lng;
@@ -76,13 +74,13 @@ export default function CadastrarEndereco() {
                     return acc;
                 }, {});
 
-                addEndereco(endereco)
+                addEndereco(endereco); // Chamada correta da função
                 setEndereco({ ...endereco, cep });
             } else {
-                console.error("Erro ao buscar endereço:", data.status);
+                console.error('Erro ao buscar endereço:', data.status);
             }
         } catch (error) {
-            console.error("Erro ao chamar a API:", error.message);
+            console.error('Erro ao chamar a API:', error.message);
         }
     };
 

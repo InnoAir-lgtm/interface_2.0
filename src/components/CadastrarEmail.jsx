@@ -1,4 +1,5 @@
 import  { useState } from 'react';
+import api from '../apiUrl';
 
 export default function CadastrarEmail({ selectedPessoa }) {
     const [contato, setContato] = useState({ email: '', numero: '', email_tipo: '', pes_id: '' });
@@ -40,20 +41,11 @@ export default function CadastrarEmail({ selectedPessoa }) {
         };
 
         try {
-            const response = await fetch('http://localhost:3000/associar-contato-pessoa', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(contatoData),
-            });
+            const response = await api.post('/associar-contato-pessoa', contatoData);
 
-            if (!response.ok) {
-                throw new Error('Erro ao salvar contato');
-            }
 
-            const data = await response.json();
-            alert(data.message);
+        
+            alert(response.data.message);
         } catch (error) {
             console.error('Erro ao salvar contato:', error.message);
             alert('Não foi possível salvar o contato.');

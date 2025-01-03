@@ -18,17 +18,19 @@ export default function ListEndPessoa({ selectedPessoa }) {
                 method: 'GET',
             });
 
-            setEnderecos(data.data);
+            // Corrigindo para acessar os dados da resposta
+            setEnderecos(response.data.data || []);
         } catch (error) {
             console.error('Erro ao listar endereços:', error.message);
         }
     };
 
+
     return (
         <div>
             <button
                 onClick={() => setShowSidebar(true)}
-                className="px-5 py-3  text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="px-5 py-3 md:w-20 lg:w-48 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
                 Lista de endereços
             </button>
