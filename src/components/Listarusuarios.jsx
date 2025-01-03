@@ -16,7 +16,6 @@ export default function ListarUsuarios() {
         async function fetchUsuarios() {
             try {
                 const response = await api.get('/listar-usuarios');
-                if (!response.ok) throw new Error('Erro ao buscar usuários');
                 const data = await response.json();
                 setUsuarios(data);
             } catch (error) {
@@ -27,7 +26,6 @@ export default function ListarUsuarios() {
         async function fetchPapeis() {
             try {
                 const response = await api.get('/listar-papeis');
-                if (!response.ok) throw new Error('Erro ao buscar papéis');
                 const data = await response.json();
                 setPapeis(data);
             } catch (error) {
