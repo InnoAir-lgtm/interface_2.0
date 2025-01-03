@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import api from '../apiUrl';
 
 export default function ListaPapeis() {
     const [papeis, setPapeis] = useState([]);
@@ -11,7 +12,7 @@ export default function ListaPapeis() {
     useEffect(() => {
         async function fetchPapeis() {
             try {
-                const response = await fetch('http://localhost:3000/listar-papeis');
+                const response = await api.get('/listar-papeis');
                 if (!response.ok) throw new Error('Erro ao buscar papéis.');
                 const data = await response.json();
                 setPapeis(data);
@@ -26,7 +27,7 @@ export default function ListaPapeis() {
 
         async function fetchPermissoes() {
             try {
-                const response = await fetch('http://localhost:3000/listar-permissoes');
+                const response = await api.get('/listar-permissoes');
                 if (!response.ok) throw new Error('Erro ao buscar permissões.');
                 const data = await response.json();
                 setPermissoes(data);
@@ -45,7 +46,7 @@ export default function ListaPapeis() {
         setLoadingPermissoes(true); // Inicia o spinner
 
         try {
-            const response = await fetch(`http://localhost:3000/permissoes-por-papel/${papel.pap_id}`);
+            const response = await api.get(`/permissoes-por-papel/${papel.pap_id}`);
             if (!response.ok) throw new Error('Erro ao buscar permissões do papel.');
             const data = await response.json();
             setSelectedPermissoes(data);
@@ -70,12 +71,12 @@ export default function ListaPapeis() {
     const handleAssociarPermissoes = async () => {
         try {
 
-            const response = await fetch(`http://localhost:3000/permissoes-por-papel/${selectedPapel.pap_id}`);
+            const response = await api.get(`/permissoes-por-papel/${selectedPapel.pap_id}`);
             const permissoesAtuais = await response.json();
 
             for (const permissaoId of selectedPermissoes) {
                 if (!permissoesAtuais.includes(permissaoId)) {
-                    await fetch('http://localhost:3000/associar-permissao', {
+                    await api.get('/associar-permissao', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ papel_id: selectedPapel.pap_id, permissao_id: permissaoId }),
@@ -85,7 +86,7 @@ export default function ListaPapeis() {
 
             for (const permissaoId of permissoesAtuais) {
                 if (!selectedPermissoes.includes(permissaoId)) {
-                    await fetch('http://localhost:3000/remover-permissao', {
+                    await api.get('/remover-permissao', {
                         method: 'DELETE',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ papel_id: selectedPapel.pap_id, permissao_id: permissaoId }),

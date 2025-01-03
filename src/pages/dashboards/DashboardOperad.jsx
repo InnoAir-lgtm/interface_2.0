@@ -3,6 +3,7 @@ import { useAuth } from '../../auth/AuthContext';
 import { CgProfile } from "react-icons/cg";
 import EmpresaComponent from '../../components/Pessoa';
 
+import api from '../../apiUrl';
 export default function DashboardOperad() {
     const { logout, user } = useAuth();
     const [showPopup, setShowPopUp] = useState(false);
@@ -13,10 +14,9 @@ export default function DashboardOperad() {
 
     const fetchAssociacoes = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/listar-associacoes/${user.id}`);
-            if (!response.ok) throw new Error('Erro ao buscar associações.');
+            const response = await api.get(`/listar-associacoes/${user.id}`);
+            const data = response.data;
 
-            const data = await response.json();
             const empresasUnicas = data.filter(
                 (empresa, index, self) =>
                     index === self.findIndex((e) => e.emp_cnpj === empresa.emp_cnpj)
@@ -24,11 +24,12 @@ export default function DashboardOperad() {
 
             setEmpresas(empresasUnicas);
         } catch (error) {
-            console.error('Erro ao buscar associações:', error.message);
+            console.error('Erro ao buscar associações:', error.response?.data || error.message);
         } finally {
             setLoading(false);
         }
     };
+
 
     useEffect(() => {
         if (user?.id) {

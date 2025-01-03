@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GoPlus } from "react-icons/go";
+import api from "../apiUrl";
 
 export default function CadastrarPessoa() {
     const [tipoPessoa, setTipoPessoa] = useState("");
@@ -20,14 +21,7 @@ export default function CadastrarPessoa() {
     useEffect(() => {
         const fetchTipoPessoaT = async () => {
             try {
-                const response = await fetch("http://localhost:3000/listar-tipos-pessoa");
-                if (response.ok) {
-                    const result = await response.json();
-                    const resultData = Array.isArray(result.data) ? result.data : [];
-                    setTipoPessoaT(resultData);
-                } else {
-                    console.error("Erro ao buscar tipos de pessoa:", response.statusText);
-                }
+                const response = await api.get("/listar-tipos-pessoa");
             } catch (error) {
                 console.error("Erro na conexão com a API:", error);
             }
@@ -56,7 +50,7 @@ export default function CadastrarPessoa() {
         };
     
         try {
-            const response = await fetch("http://localhost:3000/cadastrar-pessoa", {
+            const response = await api.get("/cadastrar-pessoa", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -72,7 +66,7 @@ export default function CadastrarPessoa() {
                 console.log("Pessoa cadastrada com sucesso:", result);
     
                 if (selectedTipo && pes_id) {
-                    const tipoPessoaResponse = await fetch("http://localhost:3000/cadastrar-tipo-pessoa", {
+                    const tipoPessoaResponse = await api.get("/cadastrar-tipo-pessoa", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

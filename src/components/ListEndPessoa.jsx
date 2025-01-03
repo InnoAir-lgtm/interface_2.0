@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import api from '../apiUrl';
 
 export default function ListEndPessoa({ selectedPessoa }) {
     const [showSidebar, setShowSidebar] = useState(false);
@@ -13,16 +14,10 @@ export default function ListEndPessoa({ selectedPessoa }) {
 
     const listarEnderecos = async (pes_id) => {
         try {
-            const urlApi = process.env.REACT_APP_API_URL
-            const response = await fetch(`http://localhost:3000/listar-endereco?pes_id=${pes_id}`, {
+            const response = await api.get(`/listar-endereco?pes_id=${pes_id}`, {
                 method: 'GET',
             });
 
-            if (!response.ok) {
-                throw new Error('Erro ao listar endereços');
-            }
-
-            const data = await response.json();
             setEnderecos(data.data);
         } catch (error) {
             console.error('Erro ao listar endereços:', error.message);

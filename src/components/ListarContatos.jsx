@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { RiContactsBook3Fill } from "react-icons/ri";
+import api from '../apiUrl';
 
 export default function ListarContatos({ selectedPessoa }) {
     const [contatos, setContatos] = useState([])
@@ -13,14 +14,9 @@ export default function ListarContatos({ selectedPessoa }) {
 
     const listarContato = async (pes_id) => {
         try {
-            const response = await fetch(`http://localhost:3000/listar-contatos-pessoa?pes_id=${pes_id}`, {
+            const response = await api.get(`/listar-contatos-pessoa?pes_id=${pes_id}`, {
             })
 
-            if (!response.ok) {
-                throw new Error('Erro ao listar contatos')
-            }
-
-            const data = await response.json()
             setContatos(data.data)
         } catch (error) {
             console.error('Erro ao listar Contatos:', error.message);

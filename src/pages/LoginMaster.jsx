@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../apiUrl';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 
@@ -13,9 +13,8 @@ export default function LoginMaster() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/login-master', { email, senha });
+            const response = await api.post('/login-master', { email, senha });
             const { user } = response.data;
-
             login(user);
 
             if (user.perfil === 'Master') {

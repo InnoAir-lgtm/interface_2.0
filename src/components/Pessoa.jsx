@@ -7,6 +7,8 @@ import CadastrarComplementar from "./CadastrarComplementar";
 import ListEndPessoa from "./ListEndPessoa";
 import ListarContatos from "./ListarContatos";
 
+import api from "../apiUrl";
+
 const EmpresaComponent = ({ schema }) => {
     const [selectedPessoa, setSelectedPessoa] = useState(null);
 
@@ -18,20 +20,16 @@ const EmpresaComponent = ({ schema }) => {
 
     const fetchPessoas = async () => {
         try {
-            const response = await fetch("http://localhost:3000/pessoas");
-            if (!response.ok) {
-                throw new Error("Erro ao buscar pessoas");
-            }
-            const data = await response.json();
-            setPessoas(data);
+            const response = await api.get("/pessoas"); // Certifique-se de que a URL está correta
+            const data = response.data; // Extrai os dados do response
+            setPessoas(data); // Atualiza o estado com os dados recebidos
         } catch (error) {
-            setError(error.message);
+            setError(error.message); // Define a mensagem de erro caso ocorra
         } finally {
-            setLoading(false);
+            setLoading(false); // Finaliza o carregamento
         }
     };
 
-    
 
 
     useEffect(() => {

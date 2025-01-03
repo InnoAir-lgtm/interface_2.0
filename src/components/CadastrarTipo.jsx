@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { GoPlus } from "react-icons/go";
+import api from '../apiUrl';
 
 export default function CadastrarTipoModal({ schema }) {
     const [descricao, setDescricao] = useState('');
@@ -10,27 +11,21 @@ export default function CadastrarTipoModal({ schema }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:3000/cadastrar-tipo-pessoa`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    schema,
-                    descricao,
-                    classificacao,
-                }),
+            const response = await api.get('/cadastrar-tipo-pessoa', {
+                schema,
+                descricao,
+                classificacao,
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
-                setMessage('Tipo de pessoa cadastrado com sucesso!');
+            if (response.status === 200) {
+                setMessage('Tipo cadastrado com sucesso!');
                 setDescricao('');
                 setClassificacao('');
             } else {
-                throw new Error(data.message || 'Erro ao cadastrar.');
+                throw new Error('Erro ao cadastrar tipo.');
             }
         } catch (error) {
-            setMessage(`Erro: ${error.message}`);
+            setMessage(`Erro: ${error.response?.data?.message || error.message}`);
         }
     };
 
@@ -51,12 +46,10 @@ export default function CadastrarTipoModal({ schema }) {
                 Cadastrar Tipo
             </button>
 
-
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-800 bg-opacity-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-
-                        <div className='flex justify-between items-center'>
+                        <div className="flex justify-between items-center">
                             <h2 className="text-lg font-bold">Cadastrar Tipo de Pessoa</h2>
                             <button
                                 onClick={closeModal}
@@ -100,15 +93,10 @@ export default function CadastrarTipoModal({ schema }) {
                             </button>
                         </form>
 
-                        {message && <p className="text-red-500 mt-2">{message}</p>}
-
-
-
+                        {message && <p className={`mt-2 ${message.includes('Erro') ? 'text-red-500' : 'text-green-500'}`}>{message}</p>}
                     </div>
                 </div>
             )}
         </div>
     );
 }
-
-

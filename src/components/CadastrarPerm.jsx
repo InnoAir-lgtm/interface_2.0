@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../apiUrl';
 
 export default function CadastrarPerm() {
     const [permis, setPermis] = useState({ permiss: '', descricao: '', });
@@ -9,7 +9,7 @@ export default function CadastrarPerm() {
     const handlePermissionSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/cadastrar-permissoes', {
+            const response = await api.post('/cadastrar-permissoes', {
                 permissao: permis.permiss,
                 descricao: permis.descricao,
             });
